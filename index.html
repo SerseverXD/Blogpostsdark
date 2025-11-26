@@ -273,8 +273,31 @@
       font-size: 1rem;
     }
 
-    .view-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .view-content { margin-top: 1rem; line-height: 1.7; font-size: 1.05rem; white-space: pre-wrap; word-wrap: break-word; }
+    /* --- NEW: Detail Card for Full Post View --- */
+    .detail-card {
+        background: var(--card-bg);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow);
+        backdrop-filter: var(--blur);
+        border: 1px solid rgba(214, 40, 40, 0.1);
+    }
+
+    .view-title { 
+        font-size: 1.6rem; 
+        font-weight: 700; 
+        margin-bottom: 0.5rem; 
+        /* Reset margin for view */
+        margin-top: 0; 
+    }
+    .view-content { 
+        margin-top: 1rem; 
+        line-height: 1.7; 
+        font-size: 1.05rem; 
+        white-space: pre-wrap; 
+        word-wrap: break-word; 
+    }
     .action-row { display: flex; justify-content: flex-start; margin-top: 2rem; gap: 1rem; }
     
     /* Reaction Styling */
@@ -541,10 +564,12 @@
         </section>
 
         <section id="viewPostPage" class="hidden">
-            <div id="viewPost"></div>
-            <div class="action-row"></div>
-             <div id="detailReactions" class="reaction-bar" style="border-top: none;"></div>
-            <small id="postOwnerInfo" style="display: block; margin-top: 15px; color: #aaa;"></small>
+            <div class="detail-card">
+                <div id="viewPost"></div>
+                <div class="action-row"></div>
+                 <div id="detailReactions" class="reaction-bar" style="border-top: none;"></div>
+                <small id="postOwnerInfo" style="display: block; margin-top: 15px; color: #aaa;"></small>
+            </div>
         </section>
         
         <section id="profilePage" class="hidden">
@@ -597,7 +622,9 @@
     <nav>
         <button id="homeBtn" class="active"><i class="fa-solid fa-sleigh"></i><span>Home</span></button> 
         <button id="newBtn"><i class="fa-solid fa-candy-cane"></i><span>New</span></button> 
-        <button id="profileBtn"><i class="fa-solid fa-user"></i><span>Profile</span></button> <button id="privacyBtn"><i class="fa-solid fa-shield-halved"></i><span>Privacy</span></button> </nav>
+        <button id="profileBtn"><i class="fa-solid fa-user"></i><span>Profile</span></button> 
+        <button id="privacyBtn"><i class="fa-solid fa-shield-halved"></i><span>Privacy</span></button> 
+    </nav>
 
     <div id="popupOverlay">
         <div id="popup">
@@ -1190,9 +1217,11 @@
         const formattedDate = post.timestamp.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         const userReaction = post.reactedBy[currentUserId] || 'none';
 
+        // Display Post Details
         viewPost.innerHTML = `<div class="view-title">${post.title}</div><small>Posted by ${getPostOwnerName(post)} on ${formattedDate}</small><div class="view-content">${post.content}</div>`;
-        actionRow.innerHTML = '';
         
+        // Display Action Row (Delete Button)
+        actionRow.innerHTML = '';
         if (canDelete) {
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'btn-delete';
@@ -1201,16 +1230,20 @@
             actionRow.appendChild(deleteBtn);
         }
 
+        // Display Reactions
         detailReactionsContainer.innerHTML = `
             <a class="reaction-button ${userReaction === 'like' ? 'liked' : ''}" data-type="like" data-id="${post.id}" style="font-size: 1.1rem; gap: 8px;"><i class="${userReaction === 'like' ? 'fas' : 'far'} fa-heart"></i><span>${post.likes} Likes</span></a>
             <a class="reaction-button ${userReaction === 'dislike' ? 'disliked' : ''}" data-type="dislike" data-id="${post.id}" style="font-size: 1.1rem; gap: 8px;"><i class="${userReaction === 'dislike' ? 'fas' : 'far'} fa-thumbs-down"></i><span>${post.dislikes} Dislikes</span></a>`;
         
+        // Display Owner Info (Debug/Admin)
         postOwnerInfo.textContent = `User ID: ${post.ownerId.substr(0,5)}...`;
         if (isAdmin) postOwnerInfo.textContent += ` (Admin View)`;
 
+        // Attach Reaction Handlers to detail view buttons
         detailReactionsContainer.querySelectorAll('.reaction-button').forEach(button => {
             button.addEventListener('click', (e) => { e.stopPropagation(); handleReaction(post.id, button.dataset.type, currentPostsData[post.id]); });
         });
+        
         switchPage('viewPost');
     }
     
@@ -1284,7 +1317,7 @@
     homeBtn.onclick = () => switchPage('home');
     newBtn.onclick = () => switchPage('newPost');
     profileBtn.onclick = () => switchPage('profile');
-    privacyBtn.onclick = openPrivacySheet; /* FIX: Added explicit handler for privacyBtn */
+    privacyBtn.onclick = openPrivacySheet; 
     searchBar.oninput = (e) => displayPosts(Object.values(currentPostsData), e.target.value);
     
     initFirebase();
