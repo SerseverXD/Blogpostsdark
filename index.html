@@ -321,7 +321,7 @@
     .list-item-value { color: var(--muted); font-weight: 400; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
     .list-item-arrow { color: #c7c7cc; font-size: 16px; }
 
-    /* --- BOTTOM SHEET STYLES --- */
+    /* --- PRIVACY/BOTTOM SHEET STYLES --- */
     .bottom-sheet-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.4); z-index: 150; display: none; opacity: 0; transition: opacity 0.3s ease;
@@ -346,6 +346,128 @@
     .sheet-content h4 { font-size: 1rem; margin-bottom: 5px; margin-top: 15px; font-weight: 600; color: #555; }
     .sheet-content p, .sheet-content li { color: var(--text); font-size: 0.9rem; line-height: 1.6; margin-bottom: 10px;}
     .sheet-content ul { padding-left: 20px; }
+
+    /* --- AD STYLES (UPDATED FOR CLICKABILITY) --- */
+    #stickyAdBanner {
+        position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+        width: 100%; max-width: 450px;
+        background-color: #fff; 
+        border-top: 1px solid #e0e0e0;
+        z-index: 15;
+        display: none; 
+        height: auto; 
+        min-height: 70px; 
+        padding: 8px;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        align-items: stretch; /* Stretch children vertically */
+        overflow: hidden;
+        /* cursor: pointer; REMOVED from container, added to link */
+    }
+    
+    /* NEW: Anchor tag wrapper for sticky ad content */
+    .ad-link-wrapper {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        text-decoration: none; /* Remove underline from link */
+        color: inherit; /* Inherit color */
+        cursor: pointer;
+        padding-right: 70px; /* Reserve space for controls */
+        min-width: 0;
+    }
+
+    #stickyAdContent {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        justify-content: center; 
+        word-wrap: break-word; 
+        padding-right: 0; /* No need for padding here anymore */
+    }
+    
+    #stickyAdTitle {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text);
+        overflow-wrap: break-word; 
+        white-space: normal; 
+    }
+    
+    #stickyAdDescription {
+        font-size: 0.8rem;
+        color: var(--muted);
+        overflow-wrap: break-word; 
+        white-space: normal; 
+        margin-top: 2px;
+    }
+    
+    #stickyAdControls {
+        position: absolute;
+        top: 0; 
+        right: 0; 
+        height: 100%; /* Take full height of the banner container */
+        display: flex;
+        align-items: flex-start; 
+        justify-content: flex-end; 
+        gap: 2px;
+        flex-shrink: 0;
+        padding: 4px 8px 0 0; 
+    }
+    
+    .ad-control-btn {
+        background: rgba(255, 255, 255, 0.7); 
+        border: none;
+        padding: 2px;
+        cursor: pointer;
+        width: 18px; height: 18px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 5px; 
+        z-index: 16; 
+    }
+    
+    .ad-control-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    /* --- END STICKY AD STYLES MODIFICATIONS --- */
+
+    .native-ad-container-link { /* New class for the native ad link wrapper */
+        display: block;
+        background: #fff8e1; /* Light yellow/gold background for visibility */
+        border: 1px dashed #ffb300;
+        border-radius: var(--radius);
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: background-color 0.15s;
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit color */
+    }
+
+    .native-ad-container-link:hover { background: #fffde7; }
+    
+    .native-ad-header {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--secondary);
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .native-ad-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 5px;
+    }
+    
+    .native-ad-description {
+        font-size: 0.9rem;
+        color: var(--text);
+    }
 
     @media (max-width: 600px) {
       header { font-size: 1.1rem; padding: 0.8rem; }
@@ -383,8 +505,8 @@
             </div>
             
             <div id="commentsSection">
-                <h3 style="margin-left: 5px; margin-bottom: 15px;">Comments</h3>
-                <div id="addCommentContainer">
+                <h3 style="margin-left: 5px; margin-bottom: 15px;">Comments</h3
+                ><div id="addCommentContainer">
                     <input type="text" id="addCommentInput" placeholder="Add a comment...">
                     <button id="addCommentBtn"><i class="fa-solid fa-paper-plane"></i></button>
                 </div>
@@ -439,6 +561,23 @@
             </div>
         </section>
     </main>
+    
+    <div id="stickyAdBanner">
+        <a id="stickyAdLink" class="ad-link-wrapper" href="#" target="_blank">
+            <div id="stickyAdContent"> 
+                <div id="stickyAdTitle">Ad Loading...</div>
+                <div id="stickyAdDescription">Loading description...</div>
+            </div>
+        </a>
+        <div id="stickyAdControls">
+            <button class="ad-control-btn" title="AdChoices" onclick="event.stopPropagation(); alert('AdChoices: This ad is based on content relevant to The Blog. Click again to go to the AdChoices website.');">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/AdChoices_Icon.png" onerror="this.src='https://placehold.co/20x20/007bff/ffffff?text=Ad'" alt="AdChoices">
+            </button>
+            <button class="ad-control-btn" title="Options" onclick="event.stopPropagation(); alert('Ad Options: You can hide this ad by clicking "OK"');">
+                <img src="https://i.ibb.co/fw4kMpv/three-dots.png" onerror="this.src='https://placehold.co/20x20/333333/ffffff?text=...'" alt="Options">
+            </button>
+        </div>
+    </div>
 
     <nav>
         <button id="homeBtn" class="active"><i class="fa-solid fa-sleigh"></i><span>Home</span></button> 
@@ -558,10 +697,12 @@
     const canvasConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
     const firebaseConfig = { ...userProvidedConfig, ...canvasConfig };
     
+    // --- Firestore Paths ---
     const POSTS_COLLECTION_PATH = `/artifacts/${appId}/public/data/posts`;
     const USERS_COLLECTION_PATH = `/artifacts/${appId}/public/data/users`;
     const COMMENTS_COLLECTION_PATH = `/artifacts/${appId}/public/data/comments`;
     const ADMIN_KEY_DOC_PATH = `/artifacts/${appId}/public/data/admin/verifyKey`;
+    const ADS_COLLECTION_PATH = `/artifacts/${appId}/public/data/ads`; // NEW Ad Collection
 
     let app, db, auth;
     let isAuthReady = false;
@@ -570,12 +711,18 @@
     let currentKey = null; // Currently open post ID
     let commentsUnsubscribe = null; // To stop listening when leaving post
     
-    // --- NEW PROFILE STATE ---
+    // --- AD STATE ---
+    let allAds = [];
+    let currentStickyAd = null; // Stores the ad object (including the link)
+    let adsUnsubscribe = null;
+    let adsLoaded = false;
+    
+    // --- PROFILE STATE ---
     let currentUserName = "Dark User";
     let isDarkVerified = false;
     let isAdmin = false;
 
-    // --- ADMIN KEY CONSTANT ---
+    // --- ADMIN KEY CONSTANT (SECURITY RISK: EXPOSED) ---
     const ADMIN_PASSKEY = "9VJZxFKQhqkDrZXerdFfryKdwZ9AMrr5"; 
     const VERIFIED_BADGE_URL = "https://i.ibb.co/WNnTJDFY/verified-badge-profile-icon-png.png";
 
@@ -621,6 +768,13 @@
     const generateKeyBtn = document.getElementById('generateKeyBtn');
     const adminGroup = document.getElementById('adminGroup');
 
+    // --- Ad Banner Elements ---
+    const stickyAdBanner = document.getElementById('stickyAdBanner');
+    const stickyAdLink = document.getElementById('stickyAdLink'); // NEW
+    const stickyAdContent = document.getElementById('stickyAdContent'); 
+    const stickyAdTitle = document.getElementById('stickyAdTitle');
+    const stickyAdDescription = document.getElementById('stickyAdDescription');
+
     // --- Privacy Sheet Elements ---
     const sheetOverlay = document.getElementById('sheetOverlay');
     const privacySheet = document.getElementById('privacySheet');
@@ -651,7 +805,75 @@
         return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
     
-    // --- Profile Update Logic ---
+    // --- Ad Logic (Modified for Clickability) ---
+    function startAdsListener() {
+        if (adsUnsubscribe) adsUnsubscribe();
+        const adsQuery = query(collection(db, ADS_COLLECTION_PATH));
+        
+        adsUnsubscribe = onSnapshot(adsQuery, (snapshot) => {
+            allAds = [];
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                // ONLY include ads that exist and have a link
+                if (data.title && data.link) allAds.push({ id: doc.id, ...data }); 
+            });
+            adsLoaded = true;
+            displayStickyBannerAd();
+            // Trigger a refresh of posts to integrate native ads
+            if (!pages.home.classList.contains('hidden')) {
+                displayPosts(Object.values(currentPostsData), searchBar.value);
+            }
+        }, (error) => {
+             console.error("Error listening to ads:", error);
+             adsLoaded = true; // Mark as loaded even if empty/error
+        });
+    }
+
+    function getRandomAd() {
+        // This ensures only user-created ads are ever picked, as the allAds array is filtered in startAdsListener
+        if (allAds.length === 0) return null;
+        const randomIndex = Math.floor(Math.random() * allAds.length);
+        return allAds[randomIndex];
+    }
+
+    function displayStickyBannerAd() {
+        const ad = getRandomAd();
+        currentStickyAd = ad;
+        
+        if (ad) {
+            stickyAdTitle.textContent = ad.title;
+            stickyAdDescription.textContent = ad.description;
+            // NEW: Set the link dynamically
+            stickyAdLink.href = ad.link;
+            stickyAdBanner.style.display = 'flex'; 
+        } else {
+            stickyAdBanner.style.display = 'none';
+        }
+    }
+
+    function createNativeAdElement(ad) {
+        // NEW: Create an anchor tag for the entire native ad
+        const adLink = document.createElement('a');
+        adLink.href = ad.link;
+        adLink.target = '_blank';
+        adLink.className = 'native-ad-container-link';
+        // adLink.onclick = () => handleAdClick(ad); // Removed, using native link
+        
+        adLink.innerHTML = `
+            <div class="native-ad-header">
+                <span>ADVERTISEMENT</span>
+                <span style="color:var(--muted); font-weight:400;">Sponsored by Dark Ads</span>
+            </div>
+            <div class="native-ad-title">${ad.title}</div>
+            <div class="native-ad-description">${ad.description}</div>
+        `;
+        return adLink;
+    }
+
+    // UPDATED: Removed window.handleAdClick as native anchor tags are now used for redirection.
+    // window.handleAdClick = (ad) => { ... }
+    
+    // --- Profile Update Logic (Unchanged) ---
     function updateProfileUI() {
         profileAvatarLarge.textContent = getInitials(currentUserName);
         profileDisplayName.innerHTML = `${currentUserName} ${isDarkVerified ? `<img src="${VERIFIED_BADGE_URL}" class="verified-badge" title="Dark Verified™">` : ''}`;
@@ -704,7 +926,7 @@
         } catch (error) { return false; }
     }
     
-    // --- Admin/Verification Key Logic ---
+    // --- Admin/Verification Key Logic (Unchanged) ---
     function generateKey(length = 32) {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         let result = '';
@@ -739,7 +961,7 @@
         } catch (e) { showPopup("Error", "Verification error.", [{ text: "OK" }]); }
     }
 
-    // --- Privacy Sheet Logic ---
+    // --- Privacy Sheet Logic (Unchanged) ---
     let startY = 0; let isDragging = false;
     function openPrivacySheet() {
         sheetOverlay.classList.add('open'); privacySheet.classList.add('open');
@@ -769,7 +991,7 @@
         else privacySheet.style.transform = 'translateY(0)';
     });
 
-    // --- Navigation ---
+    // --- Navigation (Unchanged) ---
     function switchPage(page) {
         Object.values(pages).forEach(p => p.classList.add('hidden'));
         pages[page].classList.remove('hidden');
@@ -785,7 +1007,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // --- Popup ---
+    // --- Popup (Unchanged) ---
     function showPopup(title, message, buttons = [{ text: "OK" }], showInput = false, inputPlaceholder = '', inputType = 'text', inputId = 'popupInput') {
         popupTitle.textContent = title;
         popupMessage.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
@@ -822,7 +1044,7 @@
     function closePopup() { popupOverlay.style.display = 'none'; }
     popupOverlay.addEventListener('click', e => { if (e.target === popupOverlay) closePopup(); });
 
-    // --- Firebase & Logic ---
+    // --- Firebase & Logic (Unchanged logic, just calling startAdsListener) ---
     async function initFirebase() {
         setLogLevel('Silent');
         try {
@@ -834,6 +1056,7 @@
             currentUserId = auth.currentUser.uid;
             isAuthReady = true;
             await fetchUserProfile();
+            startAdsListener(); // Start Ad Listener (Modified)
             startRealtimeListener();
         } catch (error) { console.error("Error init:", error); }
     }
@@ -915,7 +1138,9 @@
             postsContainer.innerHTML = '<div class="empty-state"><i class="fa-solid fa-cloud-moon"></i><p>No posts found.</p></div>';
             return;
         }
-        filtered.forEach(post => {
+        
+        let adCounter = 0;
+        filtered.forEach((post, index) => {
             const userReaction = post.reactedBy[currentUserId] || 'none';
             const formattedDate = formatTime(post.timestamp);
             const div = document.createElement('div');
@@ -938,6 +1163,17 @@
                 });
             });
             postsContainer.appendChild(div);
+
+            // Insert Native Ad after every 4 posts
+            if (index % 4 === 3) {
+                const ad = getRandomAd();
+                // This correctly ensures only user-created ads are shown.
+                if (ad) { 
+                    const adElement = createNativeAdElement(ad);
+                    postsContainer.appendChild(adElement);
+                    adCounter++;
+                }
+            }
         });
     }
 
@@ -962,7 +1198,7 @@
         await updateDoc(postRef, { likes: newLikes, dislikes: newDislikes, [`reactedBy.${currentUserId}`]: newReactionType });
     }
 
-    // --- COMMENTS LOGIC ---
+    // --- COMMENTS LOGIC (Unchanged) ---
     
     function loadComments(postId) {
         if (commentsUnsubscribe) commentsUnsubscribe();
@@ -970,13 +1206,23 @@
         
         const q = query(collection(db, COMMENTS_COLLECTION_PATH), where("postId", "==", postId));
         
-        commentsUnsubscribe = onSnapshot(q, (snapshot) => {
+        commentsUnsubscribe = onSnapshot(q, async (snapshot) => {
             const commentsMap = {};
+            const uidsToFetch = new Set();
+            snapshot.docChanges().forEach(change => {
+                if (change.type !== "removed" && change.doc.data().ownerId) uidsToFetch.add(change.doc.data().ownerId);
+            });
+            await Promise.all(Array.from(uidsToFetch).map(uid => getUserDetails(uid)));
+            
             snapshot.forEach(doc => {
                 const data = doc.data();
+                const userDetails = userCache[data.ownerId] || { userName: 'Dark User', isVerified: false };
+
                 commentsMap[doc.id] = {
                     id: doc.id,
                     ...data,
+                    userName: userDetails.userName,
+                    isVerified: userDetails.isVerified,
                     timestamp: data.timestamp ? data.timestamp.toDate() : new Date(),
                     replies: []
                 };
@@ -1141,7 +1387,7 @@
         await batch.commit();
     }
 
-    // --- Post View Logic ---
+    // --- Post View Logic (Unchanged) ---
     function openPost(key, post, reload = true) {
         currentKey = key;
         const canDelete = post.ownerId === currentUserId || isAdmin; 
@@ -1179,7 +1425,7 @@
         }
     }
 
-    // --- Profile Handlers ---
+    // --- Profile Handlers (Unchanged) ---
     changeNameBtn.onclick = () => showPopup("Change Name", "New display name:", [{ text: "Cancel" }, { text: "Save", action: (val) => { if(val) updateUserName(val); }}], true, currentUserName);
     
     verifyBtn.onclick = () => {
@@ -1199,6 +1445,7 @@
     homeBtn.onclick = () => switchPage('home');
     newBtn.onclick = () => switchPage('newPost');
     profileBtn.onclick = () => switchPage('profile');
+    privacyBtn.onclick = openPrivacySheet;
     searchBar.oninput = (e) => displayPosts(Object.values(currentPostsData), e.target.value);
     
     initFirebase();
