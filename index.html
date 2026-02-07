@@ -2,127 +2,109 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Recipe Generator</title>
-    <script defer src="//www.chicoryapp.com/widget_v2/"></script>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iOS 26 Experience</title>
     <style>
         :root {
-            --primary: #2d5a27;
-            --accent: #f4f1ea;
-            --text: #333;
+            --ios-blur: blur(30px);
+            --ios-bg: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --text-primary: #1d1d1f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background-color: var(--accent);
-            margin: 0;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            background: var(--ios-bg);
+            background-attachment: fixed;
+            height: 100vh;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        /* The "Glass" Container */
+        .glass-card {
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:active {
+            transform: scale(0.98);
+        }
+
+        h1 {
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+        }
+
+        .ad-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
             justify-content: center;
         }
 
-        .container {
-            max-width: 800px;
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        /* Subtle Floating Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
-        h1 { color: var(--primary); margin-top: 0; }
-        
-        .meta-info {
-            font-style: italic;
-            color: #666;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+        .floating {
+            animation: float 5s ease-in-out infinite;
         }
-
-        .ingredients-list {
-            background: #fafafa;
-            padding: 20px;
-            border-left: 5px solid var(--primary);
-        }
-
-        .refresh-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .refresh-btn:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <button class="refresh-btn" onclick="generateContent()">Generate New Recipe</button>
-    
-    <div id="recipe-content">
-        </div>
-</div>
-
-<script>
-    const proteins = ["Grilled Salmon", "Roasted Chickpeas", "Braised Beef", "Tempeh", "Lemon Chicken"];
-    const bases = ["Quinoa Bowl", "Sourdough Toast", "Penne Pasta", "Garden Salad", "Street Tacos"];
-    const ingredients = [
-        "2 cups Fresh Spinach",
-        "1 tbsp Olive Oil",
-        "2 cloves Garlic, minced",
-        "1/2 tsp Sea Salt",
-        "1/4 cup Grated Parmesan",
-        "1 cup Cherry Tomatoes",
-        "1 tsp Smoked Paprika"
-    ];
-
-    function generateContent() {
-        const randomTitle = `${proteins[Math.floor(Math.random() * proteins.length)]} ${bases[Math.floor(Math.random() * bases.length)]}`;
+    <div class="glass-card floating">
+        <h1>Welcome</h1>
+        <p>iOS 26 Minimalist Concept</p>
         
-        // Shuffle ingredients for randomness
-        const shuffledIngredients = [...ingredients].sort(() => 0.5 - Math.random()).slice(0, 5);
+        <div class="ad-container">
+            <p style="font-size: 12px; opacity: 0.6;">Advertisement Space</p>
+        </div>
+    </div>
 
-        const html = `
-            <h1>${randomTitle}</h1>
-            <div class="meta-info">Ready in ${Math.floor(Math.random() * 45) + 15} minutes | Serves 2-4</div>
-            
-            <p>This randomly generated dish is perfect for a quick weeknight meal. It combines fresh flavors with simple techniques to create a restaurant-quality experience at home.</p>
-            
-            <h3>Ingredients</h3>
-            <div class="ingredients-list">
-                <ul id="ingredient-list">
-                    ${shuffledIngredients.map(ing => `<li>${ing}</li>`).join('')}
-                </ul>
-            </div>
+    <script>
+        // Interactive parallax effect for the "iOS 26" feel
+        document.addEventListener('mousemove', (e) => {
+            const card = document.querySelector('.glass-card');
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
 
-            <h3>Instructions</h3>
-            <ol>
-                <li>Gather all your ingredients on a clean workspace.</li>
-                <li>Prep the vegetables and heat your primary cooking vessel over medium heat.</li>
-                <li>Combine the items in the order listed above, ensuring even seasoning.</li>
-                <li>Garnish with fresh herbs and serve immediately.</li>
-            </ol>
-        `;
-
-        document.getElementById('recipe-content').innerHTML = html;
-
-        // If Chicory is loaded, tell it to scan the new content
-        if (window.chicory && window.chicory.scan) {
-            window.chicory.scan();
-        }
-    }
-
-    // Run on initial load
-    generateContent();
-</script>
-
+        // Reset transform on mouse out
+        document.addEventListener('mouseleave', () => {
+            const card = document.querySelector('.glass-card');
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+    </script>
 </body>
 </html>
